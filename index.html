@@ -1,0 +1,153 @@
+
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report Punto Vendita</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        h2 {
+            text-align: center;
+        }
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 600px;
+            margin: auto;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+        select, input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h2>Report Punto Vendita</h2>
+    <form id="reportForm">
+        <label for="puntoVendita">Punto Vendita:</label>
+        <select id="puntoVendita">
+            <option>Fano</option>
+            <option>Monsano</option>
+            <option>Osimo</option>
+            <option>Macerata</option>
+            <option>Civitanova</option>
+            <option>Pesaro</option>
+        </select>
+
+        <label for="deltaMese">Delta mese €:</label>
+        <input type="number" id="deltaMese">
+
+        <label for="deltaPrezzo">Delta pr. medio €:</label>
+        <input type="number" id="deltaPrezzo">
+
+        <label for="irobot">I-Robot:</label>
+        <input type="number" id="irobot">
+
+        <label for="scope">Scope no fili:</label>
+        <input type="number" id="scope">
+
+        <label for="caffe">Caffè automatiche:</label>
+        <input type="number" id="caffe">
+
+        <label for="microonde">Forni microonde:</label>
+        <input type="number" id="microonde">
+
+        
+        <label for="smegPed">Focus SMEG PED:</label>
+        <input type="number" id="smegPed">
+
+        <label for="karcher">KARCHER:</label>
+        <input type="number" id="karcher">
+
+        <label for="fuoriGriglia">Fuori Griglia:</label>
+        <input type="number" id="fuoriGriglia">
+    <!-- Campi a scelta colore -->
+    
+        <script>
+            const colorFields = [
+                'EKOS', 'SCHUCKO', 'SACCHETTI', 'CARAFFE', 'CIALDE',
+                'TESTINE', 'ACCESSORI ROBOT', 'ACCESSORI MICROONDE', 'ACCESSORI IMPASTATORI'
+            ];
+            const colors = ['Rosso', 'Arancio', 'Giallo', 'Verdino', 'Verde'];
+        </script>
+        <div id="colorFieldsContainer"></div>
+
+        <button type="button" onclick="inviaEmail()">Invia Report</button>
+    </form>
+
+    <script>
+        const container = document.getElementById('colorFieldsContainer');
+        colorFields.forEach(field => {
+            const label = document.createElement('label');
+            label.textContent = field + ':';
+            const select = document.createElement('select');
+            select.id = field.replace(/ /g, '_');
+            colors.forEach(color => {
+                const option = document.createElement('option');
+                option.value = color;
+                option.textContent = color;
+                select.appendChild(option);
+            });
+            container.appendChild(label);
+            container.appendChild(select);
+        });
+
+        function inviaEmail() {
+            const pv = document.getElementById("puntoVendita").value;
+            const deltaMese = document.getElementById("deltaMese").value;
+            const deltaPrezzo = document.getElementById("deltaPrezzo").value;
+            const irobot = document.getElementById("irobot").value;
+            const scope = document.getElementById("scope").value;
+            const caffe = document.getElementById("caffe").value;
+            const microonde = document.getElementById("microonde").value;
+
+            let corpoMail = `Punto Vendita: ${pv}%0D%0A` +
+                `Delta mese €: ${deltaMese}%0D%0A` +
+                `Delta pr. medio €: ${deltaPrezzo}%0D%0A%0D%0A` +
+                `Focus numerico:%0D%0A` +
+`- SMEG PED: ${document.getElementById("smegPed").value}%0D%0A` +
+`- KARCHER: ${document.getElementById("karcher").value}%0D%0A` +
+`- Fuori Griglia: ${document.getElementById("fuoriGriglia").value}%0D%0A` +
+                `- I-Robot: ${irobot}%0D%0A` +
+                `- Scope no fili: ${scope}%0D%0A` +
+                `- Caffè automatiche: ${caffe}%0D%0A` +
+                `- Forni microonde: ${microonde}%0D%0A%0D%0A` +
+                `Colori accessori:%0D%0A`;
+
+            colorFields.forEach(field => {
+                const val = document.getElementById(field.replace(/ /g, '_')).value;
+                corpoMail += `- ${field}: ${val}%0D%0A`;
+            });
+
+            const mailto = `mailto:d.pavoni@dml-italia.com?subject=AVANZAMENTO SETTORE PED&body=${corpoMail}`;
+            window.location.href = mailto;
+        }
+    </script>
+</body>
+</html>
